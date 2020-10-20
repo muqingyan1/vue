@@ -47,6 +47,7 @@ export function initLifecycle (vm: Component) {
   vm.$children = []
   vm.$refs = {}
 
+  // _开头的都是私有成员
   vm._watcher = null
   vm._inactive = null
   vm._directInactive = false
@@ -187,6 +188,8 @@ export function mountComponent (
     }
   } else {
     updateComponent = () => {
+      // vm._render() 用户传入的render 或者模板编译成的render(),作用是帮我们生成虚拟dom
+      // vm._update() 最终调用了patch函数，作用是对比两个虚拟dom的差异，并将差异更新到真实dom上来
       vm._update(vm._render(), hydrating)
     }
   }

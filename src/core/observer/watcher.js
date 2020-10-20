@@ -53,6 +53,7 @@ export default class Watcher {
     if (isRenderWatcher) {
       vm._watcher = this
     }
+    // _watchers记录的是 三种所有的watcher
     vm._watchers.push(this)
     // options
     if (options) {

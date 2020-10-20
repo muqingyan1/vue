@@ -36,11 +36,13 @@ export default class Dep {
 
   notify () {
     // stabilize the subscriber list first
+    // 对subs 数组进行克隆
     const subs = this.subs.slice()
     if (process.env.NODE_ENV !== 'production' && !config.async) {
       // subs aren't sorted in scheduler if not running async
       // we need to sort them now to make sure they fire in correct
       // order
+      // 按照id从小到大排序，也就是watcher的执行顺序排序
       subs.sort((a, b) => a.id - b.id)
     }
     for (let i = 0, l = subs.length; i < l; i++) {

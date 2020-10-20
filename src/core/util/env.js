@@ -1,6 +1,7 @@
 /* @flow */
 
 // can we use __proto__?
+// 用来判断 当前对象中 是否有__proto__，也就是当前浏览器 是否支持对象的原型这个属性
 export const hasProto = '__proto__' in {}
 
 // Browser environment sniffing
