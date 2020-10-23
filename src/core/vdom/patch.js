@@ -207,6 +207,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // 1. 创建组件实例，挂载到真实Dom
   function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
     let i = vnode.data
     if (isDef(i)) {

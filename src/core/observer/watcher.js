@@ -169,6 +169,7 @@ export default class Watcher {
     } else if (this.sync) {
       this.run()
     } else {
+      // 核心作用：将当前watcher 放到一个队列中
       queueWatcher(this)
     }
   }
@@ -192,6 +193,7 @@ export default class Watcher {
         const oldValue = this.value
         this.value = value
         if (this.user) {
+          // user 作用：当时用户watcher，执行回调函数时，加上try...catch 否则直接执行
           try {
             this.cb.call(this.vm, value, oldValue)
           } catch (e) {

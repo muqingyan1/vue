@@ -26,6 +26,8 @@ export function initAssetRegisters (Vue: GlobalAPI) {
         if (type === 'directive' && typeof definition === 'function') {
           definition = { bind: definition, update: definition }
         }
+        // 全局注册，存储资源并赋值
+        // this.options['components']['comp'] = ctor
         this.options[type + 's'][id] = definition
         return definition
       }

@@ -45,6 +45,7 @@ export default class Dep {
       // 按照id从小到大排序，也就是watcher的执行顺序排序
       subs.sort((a, b) => a.id - b.id)
     }
+    // 调用每个订阅者的updata方法实现更新
     for (let i = 0, l = subs.length; i < l; i++) {
       subs[i].update()
     }

@@ -86,9 +86,13 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
 
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
+  // callbacks 数组，存储了所有的回调函数
+  // 把cb加上异常处理 存入 callbacks 数组中
+  // 因为cb 是用户传进来的，所有 用户传进来的，都被认为是危险的，所有加上异常处理
   callbacks.push(() => {
     if (cb) {
       try {
+        // 调用cb()
         cb.call(ctx)
       } catch (e) {
         handleError(e, ctx, 'nextTick')
@@ -99,10 +103,12 @@ export function nextTick (cb?: Function, ctx?: Object) {
   })
   if (!pending) {
     pending = true
+    // 调用
     timerFunc()
   }
   // $flow-disable-line
   if (!cb && typeof Promise !== 'undefined') {
+    // 返回 promise 对象
     return new Promise(resolve => {
       _resolve = resolve
     })

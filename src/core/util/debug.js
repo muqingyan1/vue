@@ -9,6 +9,7 @@ export let generateComponentTrace = (noop: any) // work around flow check
 export let formatComponentName = (noop: any)
 
 if (process.env.NODE_ENV !== 'production') {
+  // 检测console方法是否可用 eg:typeof 111 ==  'number'
   const hasConsole = typeof console !== 'undefined'
   const classifyRE = /(?:^|[-_])(\w)/g
   const classify = str => str

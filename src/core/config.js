@@ -43,7 +43,7 @@ export default ({
   optionMergeStrategies: Object.create(null),
 
   /**
-   * Whether to suppress warnings.
+   * Whether to suppress warnings.  是否禁止警告
    */
   silent: false,
 
@@ -68,7 +68,7 @@ export default ({
   errorHandler: null,
 
   /**
-   * Warn handler for watcher warns
+   * Warn handler for watcher warns  检测错误的处理方法
    */
   warnHandler: null,
 
