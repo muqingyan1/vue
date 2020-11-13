@@ -1,4 +1,7 @@
 /* @flow */
+/* web 平台相关的入口
+重写了平台相关的 $mount() 方法
+注册了 Vue.compile() 方法，传递一个 HTML 字符串返回 render 函数 */
 
 import config from 'core/config'
 import { warn, cached } from 'core/util/index'
@@ -27,7 +30,7 @@ Vue.prototype.$mount = function (
     process.env.NODE_ENV !== 'production' && warn(
       `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
     )
-    // this是vue实例
+    // this是vue实例，这里不明白为什么要 return this
     return this
   }
 

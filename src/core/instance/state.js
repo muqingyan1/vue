@@ -180,10 +180,13 @@ const computedWatcherOptions = { lazy: true }
 
 function initComputed (vm: Component, computed: Object) {
   // $flow-disable-line
+  // _computedWatchers 私有属性，对象形式。   key：计算属性对应的名字  value：计算属性对应的function
   const watchers = vm._computedWatchers = Object.create(null)
   // computed properties are just getters during SSR
+  // 服务端渲染环境
   const isSSR = isServerRendering()
 
+  // 遍历用户定义的计算属性 computed: { a:function(){}, b:{ get:..., set:... }}
   for (const key in computed) {
     const userDef = computed[key]
     const getter = typeof userDef === 'function' ? userDef : userDef.get
@@ -196,18 +199,21 @@ function initComputed (vm: Component, computed: Object) {
 
     if (!isSSR) {
       // create internal watcher for the computed property.
+      // 如果不是服务端渲染环境, 创建计算属性对应的 watcher 对象
       watchers[key] = new Watcher(
-        vm,
-        getter || noop,
-        noop,
-        computedWatcherOptions
+        vm,  // 当前实例
+        getter || noop, // 计算属性对应的function
+        noop,  // 空函数，侦听器会用到
+        computedWatcherOptions // 常量，标记lazy: true。 作用是，创建完watcher之后，不立即执行 watcher的get方法
       )
     }
 
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
+    // 如果vm上没有当前计算属性的名字， 则在vm上定义该计算属性，否则如果是开发环境发送警告
     if (!(key in vm)) {
+      // userDef 上面拿到的值，可能是function 也可能是对象
       defineComputed(vm, key, userDef)
     } else if (process.env.NODE_ENV !== 'production') {
       if (key in vm.$data) {
@@ -224,6 +230,7 @@ export function defineComputed (
   key: string,
   userDef: Object | Function
 ) {
+  // 首先判断是否为服务端渲染环境，如果不是服务端渲染环境，应该缓存
   const shouldCache = !isServerRendering()
   if (typeof userDef === 'function') {
     sharedPropertyDefinition.get = shouldCache
@@ -247,19 +254,25 @@ export function defineComputed (
       )
     }
   }
+  // 给vm对象上 定义该计算属性  给vm 的 key属性 增加 { get/set}
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
 function createComputedGetter (key) {
   return function computedGetter () {
+    // 获取该计算属性对应的 watcher 对象
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
+      // 这个位置起到缓存的作用
+      // 第一次访问计算属性的时候 dirty 为 true，执行evaluate 获取计算属性的值，
       if (watcher.dirty) {
         watcher.evaluate()
       }
       if (Dep.target) {
         watcher.depend()
       }
+      // watcher在执行的时候，肯定会获取计算属性对应的值，把值放入到watcher.value中 返回
+      // 值得计算 是通过watch 对象内部计算的，可以查看watch的封装 observer——watcher.js
       return watcher.value
     }
   }

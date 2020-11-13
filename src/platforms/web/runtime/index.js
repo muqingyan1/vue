@@ -1,4 +1,10 @@
 /* @flow */
+/* web 平台相关
+注册和平台相关的全局指令：v-model、v-show
+注册和平台相关的全局组件： v-transition、v-transition-group
+全局方法：
+__patch__：把虚拟 DOM 转换成真实 DOM
+$mount：挂载方法 */
 
 import Vue from 'core/index'
 import config from 'core/config'
@@ -20,6 +26,7 @@ import platformDirectives from './directives/index'
 import platformComponents from './components/index'
 
 // install platform specific utils
+// 设置 Vue.config
 Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.isReservedAttr = isReservedAttr
@@ -27,13 +34,16 @@ Vue.config.getTagNamespace = getTagNamespace
 Vue.config.isUnknownElement = isUnknownElement
 
 // install platform runtime directives & components
-extend(Vue.options.directives, platformDirectives)
-extend(Vue.options.components, platformComponents)
+// 设置平台相关的指令和组件
+extend(Vue.options.directives, platformDirectives) // 指令 v-model、v-show
+extend(Vue.options.components, platformComponents) // 组件 transition、transition-group
 
 // install platform patch function
+// 设置平台相关的 __patch__ 方法（打补丁方法，对比新旧的 VNode）
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 
 // public mount method
+// 设置 $mount 方法，挂载 DOM
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
